@@ -7,7 +7,7 @@ import (
 )
 
 type TransactionService interface {
-	CreateTransaction(userID uint, amount int64, categoryID *uint, transactionDate time.Time, transactionType string) error
+	CreateTransaction(*models.Transaction) error
 	GetTransactions(userID uint, filter *repository.TransactionFilter) ([]*models.Transaction, error)
 	GetTransactionByID(transactionID uint) (*models.Transaction, error)
 	UpdateTransaction(transactionID uint, amount int64, categoryID *uint, transactionDate time.Time, transactionType string) error
@@ -22,14 +22,7 @@ func NewTransactionService(repo repository.TransactionRepository) TransactionSer
 	return &transactionService{repo: repo}
 }
 
-func (s *transactionService) CreateTransaction(userID uint, amount int64, categoryID *uint, transactionDate time.Time, transactionType string) error {
-	transaction := &models.Transaction{
-		UserID:          userID,
-		Amount:          amount,
-		CategoryID:      categoryID,
-		TransactionDate: transactionDate,
-		Type:            transactionType,
-	}
+func (s *transactionService) CreateTransaction(transaction *models.Transaction) error {
 	return s.repo.CreateTransaction(transaction)
 }
 
