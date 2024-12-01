@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable, tap, shareReplay, BehaviorSubject } from 'rxjs';
-import { UserLoginApiPayload } from '../../components/login-page/login-page.component';
 import Cookies from 'js-cookie';
-import { ApiService } from '../api/api.service';
+import { ApiService, UserLoginApiResponse } from '../api/api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StateService {
 
-  private _user = {
-    data: new BehaviorSubject<UserLoginApiPayload | null>(null),
+  public user = {
+    data: new BehaviorSubject<UserLoginApiResponse | null>(null),
     loading: new BehaviorSubject<boolean>(false),
     error: new BehaviorSubject<Error | null>(null),
   };
@@ -21,5 +20,25 @@ export class StateService {
     Cookies.set('token', token, { sameSite: 'strict', path: '/', secure: true, expires: 30 })
   }
 
-  
+  public login(authData: { login: string, password: string }): Observable<UserLoginApiResponse> {
+    this.user.loading.next(true);
+    this.user.error.next(null);
+
+    return this.apiService.login(authData).pipe(
+      tap({
+        next: response => {
+          this.setAuthCookieToken(response.token);
+          this.user.data.next({ ...response });
+          this.user.loading.next(false);
+          this.user.error.next(null);
+        },
+        error: error => {
+          this.user.data.next(null);
+          this.user.loading.next(false);
+          this.user.error.next(error);
+        },
+      }),
+      shareReplay({ bufferSize: 1, refCount: false })
+    );
+  }
 }
