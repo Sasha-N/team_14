@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:14
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pmi-gotosw
+      - POSTGRES_DB=finomic
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://postgres:pmi-gotosw@db:5432/finomic?sslmode=disable
+      - JWT_SECRET=ghgsjgjidgwgwiwmefmwemdfwnfipun
+
+  front-app:
+    build:
+      context: ./front-app
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
