@@ -20,6 +20,10 @@ export class StateService {
     Cookies.set('token', token, { sameSite: 'strict', path: '/', secure: true, expires: 30 })
   }
 
+  public getAuthCookieToken(): string | undefined {
+    return Cookies.get('token');
+  }
+
   public login(authData: { name: string, password: string }): Observable<UserLoginApiResponse> {
     this.user.loading.next(true);
     this.user.error.next(null);
