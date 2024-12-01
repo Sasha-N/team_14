@@ -1,0 +1,51 @@
+<div class="container">
+
+    <span class="form-title">Управляй своими финансами</span>
+
+    <form [formGroup]="loginForm" class="login-form">
+
+        <h2>Регистрация</h2>
+
+        <div class="form-search-row">
+            <span>Имя</span>
+            <mat-form-field class="form-search-field">
+
+                <input matInput formControlName="login" placeholder="Иван">
+                @if (loginForm.controls.login.hasError('required')) {
+                <mat-error>Введите своё имя</mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <div class="form-search-row">
+            <span>Пароль</span>
+            <mat-form-field class="form-search-field">
+                <input matInput formControlName="password" type="password">
+                @if (loginForm.controls.password.hasError('required')) {
+                <mat-error>Требуется пароль</mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <div class="form-search-row">
+            <span>Подтвердите пароль</span>
+            <mat-form-field class="form-search-field">
+                <input matInput formControlName="confirmPassword" type="password">
+                @if (loginForm.controls.password.hasError('required')) {
+                <mat-error>Требуется подтвердить пароль</mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        @if (userData.error) {
+        <mat-error>Неправильное имя или пароль</mat-error>
+        }
+
+        <button mat-flat-button class="login-form-submit" [disabled]="!loginForm.valid || userData.loading"
+            type="submit" (click)="registr()">
+            <mat-icon>login</mat-icon>
+            <span>Отправить</span>
+        </button>
+    </form>
+
+</div>
