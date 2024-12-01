@@ -32,7 +32,7 @@ transaction_date DATE NOT NULL DEFAULT CURRENT_DATE,
 type VARCHAR(10) NOT NULL CHECK (type IN ('income', 'expense'))
 );
 
--- Индексы для повышения производительности
+-- Индексы
 CREATE INDEX IF NOT EXISTS idx_transactions_user_id ON transactions (user_id);
 CREATE INDEX IF NOT EXISTS idx_transactions_transaction_date ON transactions (transaction_date);
 CREATE INDEX IF NOT EXISTS idx_transactions_category_id ON transactions (category_id);
