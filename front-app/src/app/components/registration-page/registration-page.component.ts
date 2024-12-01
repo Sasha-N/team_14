@@ -77,9 +77,9 @@ export class RegistrationPageComponent implements OnDestroy, AfterViewInit{
   }
 
 
-  public login(): void {
-    this._state.login({
-      login: this.loginForm.controls.login.value,
+  public registr(): void {
+    this._state.registr({
+      name: this.loginForm.controls.login.value,
       password: this.loginForm.controls.password.value,
     }).pipe(
       takeUntil(this._destroyed),

@@ -77,7 +77,7 @@ export class LoginPageComponent implements AfterViewInit, OnDestroy {
 
   public login(): void {
     this._state.login({
-      login: this.loginForm.controls.login.value,
+      name: this.loginForm.controls.login.value,
       password: this.loginForm.controls.password.value,
     }).pipe(
       takeUntil(this._destroyed),
