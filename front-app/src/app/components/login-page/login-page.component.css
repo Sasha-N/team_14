@@ -1,0 +1,26 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: inherit;
+    min-height: 100dvh;
+    min-height: 100vh;
+  }
+  
+  .login-form {
+    width: 100%;
+    max-width: 576px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+  
+  .form-search-row {
+    .mat-mdc-form-field {
+      display: flex;
+    }
+  }
+  
+  .login-form-submit {
+    align-self: flex-end;
+  }
