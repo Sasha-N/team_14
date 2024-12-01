@@ -1,0 +1,11 @@
+@startsalt
+skinparam handwritten true
+skinparam Backgroundcolor LightSkyBlue
+{+
+  Авторизация
+  -- | --
+  Имя (логин)     | "Введите имя"
+  Пароль    | "**** "
+  [ Отмена ]   | [ Войти ]
+}
+@endsalt

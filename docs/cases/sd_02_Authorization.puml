@@ -1,0 +1,37 @@
+@startuml
+actor "Клиент" as user
+participant "FE. ЭФ Авторизация" as auth_form
+participant "BE. Скрипт авторизации" as auth_script
+database "DB. База данных" as db
+
+user -> auth_form: Заполнение формы авторизации
+auth_form <- user: Отправка данных
+auth_form -> auth_script: POST запрос с данными (username, password)
+activate auth_script
+
+auth_script -> db: Проверка существования пользователя
+activate db
+db --> auth_script: Результат проверки (существует/не существует)
+deactivate db
+
+alt Пользователь существует
+    auth_script -> db: Проверка пароля (password)
+    activate db
+    db --> auth_script: Результат проверки пароля (верный/неверный)
+    deactivate db
+
+    alt Пароль верный
+        auth_script --> auth_form: Авторизация [Да]
+        auth_form --> user: Сообщение об авторизации
+    else Пароль неверный
+        auth_script --> auth_form: Авторизация [Нет]
+        auth_form --> user: Сообщение [Ошибка]: неверный пароль
+    end
+
+else Пользователь не существует
+    auth_script --> auth_form: Авторизация [Нет]
+    auth_form --> user: Сообщение [Ошибка]: пользователь не найден
+end
+
+deactivate auth_script
+@enduml

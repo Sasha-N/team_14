@@ -1,0 +1,28 @@
+@startuml
+    actor "Клиент" as user
+    participant "FE. ЭФ Регистрация" as reg_form
+    participant "BE. Рег.скрипт" as reg_script
+    database "DB. База данных" as db
+
+    user -> reg_form: Заполнение формы регистрации
+    reg_form <- user: Отправка данных
+    reg_form -> reg_script: POST запрос с данными (username, password)
+    activate reg_script
+
+    reg_script -> db: Проверка существования
+    activate db
+    db --> reg_script: Результат проверки (существует/не существует)
+    deactivate db
+
+    alt Пользователь добавлен
+        reg_script -> db: Вставка пользователя (username, password)
+        db --> reg_script: Успешная вставка
+        reg_script --> reg_form: Регистрация [Да]
+        reg_form --> user: Сообщение о регистрации
+    else Пользователь не добавлен
+        reg_script --> reg_form : Регистрация [Нет]
+        reg_form --> user: Сообщение [Ошибка]: пользователь существует
+    end
+
+    deactivate reg_script
+@enduml
