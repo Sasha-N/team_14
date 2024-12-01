@@ -37,7 +37,7 @@ func (r *categoryRepository) UpdateCategory(category *models.Category) error {
 }
 
 func (r *categoryRepository) DeleteCategory(categoryID uint) error {
-	return r.db.Delete(&models.Category{}, categoryID).Error
+	return r.db.Unscoped().Delete(&models.Category{}, categoryID).Error
 }
 
 func (r *categoryRepository) GetCategoryByID(categoryID uint) (*models.Category, error) {

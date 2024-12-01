@@ -31,14 +31,36 @@ func (h *TransactionHandler) CreateTransaction(c *gin.Context) {
 		return
 	}
 
-	var transaction models.Transaction
+	var transaction struct {
+		Amount          int64  `json:"amount" binding:"required"`
+		CategoryID      uint   `json:"category_id" binding:"required"`
+		TransactionDate string `json:"transaction_date" binding:"required"`
+		Type            string `json:"type" binding:"required"`
+	}
+
 	if err := c.ShouldBindJSON(&transaction); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	transaction.UserID = userID
-	if err := h.transactionService.CreateTransaction(userID, transaction.Amount, transaction.CategoryID, transaction.TransactionDate, transaction.Type); err != nil {
+	transactionDate, err := time.Parse("2006-01-02", transaction.TransactionDate)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	categoryID := transaction.CategoryID
+	categoryIDPtr := &categoryID
+
+	newTransaction := models.Transaction{
+		UserID:          userID,
+		Amount:          transaction.Amount,
+		CategoryID:      categoryIDPtr,
+		TransactionDate: transactionDate,
+		Type:            transaction.Type,
+	}
+
+	if err := h.transactionService.CreateTransaction(&newTransaction); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
